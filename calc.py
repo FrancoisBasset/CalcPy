@@ -1,4 +1,4 @@
-from graph import printTreeGraph
+#from graph import printTreeGraph
 
 # -----------------------------------------------------------------------------
 # calc.py
@@ -101,10 +101,10 @@ def p_expression_binop(p):
     #elif p[2] == '*': p[0] = p[1] * p[3]
     #elif p[2] == '/': p[0] = p[1] / p[3]
 
-    printTreeGraph((p[2], p[1], p[3]))
+    print(p[2], p[1], p[3])
 
     
-    print("Résultat '%s'" % p[0])
+    print("Résultat '%s'" % eval(p))
     t = []
     t.append(p[2])
     t.append(p[1])
@@ -166,10 +166,6 @@ def p_statement_cond(p):
     '''expression : expression SI expression
                   | expression ALORS expression
                   | expression SINON expression'''
-
-    if[2] == 'SI' : print("SI envoyé")
-    if[1] == 'SI' : print("si en 1")
-    
 
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
