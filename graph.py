@@ -22,5 +22,3 @@ def addNode(graph, t):
     graph.edge(str(myId), str(addNode(graph, t[2])), arrowsize='0')
 
     return myId
-    
-printTreeGraph(('+', 'lknlnk', ('*', 4, 6)))

@@ -1,5 +1,4 @@
-
-import graph
+from graph import printTreeGraph
 
 # -----------------------------------------------------------------------------
 # calc.py
@@ -75,6 +74,8 @@ def p_statement_assign(p):
     'statement : NAME EQUALS expression'
     names[p[1]] = p[3]
 
+    tt = (p[2], p[1], p[3])
+    print(tt)
     printTreeGraph((p[2], p[1], p[3]))
 
 def p_statement_expr(p):
@@ -87,7 +88,7 @@ def p_statement_expr(p):
             print(p[index])
     #eval(p)
 
-    printTreeGraph((p[2], p[1], p[3]))
+    #printTreeGraph((p[2], p[1], p[3]))
 
 def p_expression_binop(p):
     '''expression : expression PLUS expression
@@ -95,10 +96,10 @@ def p_expression_binop(p):
                   | expression TIMES expression
                   | expression DIVIDE expression'''
     
-    if p[2] == '+'  : p[0] = p[1] + p[3]
-    elif p[2] == '-': p[0] = p[1] - p[3]
-    elif p[2] == '*': p[0] = p[1] * p[3]
-    elif p[2] == '/': p[0] = p[1] / p[3]
+    #if p[2] == '+'  : p[0] = p[1] + p[3]
+    #elif p[2] == '-': p[0] = p[1] - p[3]
+    #elif p[2] == '*': p[0] = p[1] * p[3]
+    #elif p[2] == '/': p[0] = p[1] / p[3]
 
     printTreeGraph((p[2], p[1], p[3]))
 
@@ -175,7 +176,12 @@ def p_expression_uminus(p):
     p[0] = -p[2]
 
 def p_expression_group(p):
-    'expression : LPAREN expression RPAREN'
+    '''expression : LPAREN expression RPAREN
+                  | expression'''
+    print(p[0])
+    print(p[1])
+    print(p[2])
+    print(p[3])
     p[0] = p[2]
 
 def p_expression_number(p):
