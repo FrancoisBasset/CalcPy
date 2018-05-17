@@ -11,7 +11,7 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG', 'OR', 'AND', 'SEMICOLON', 'SI', 'ALORS', 'SINON'
+    'EG', 'NEG'
     )
 
 # Tokens
@@ -31,12 +31,8 @@ t_SUPEG    = r'>='
 t_INFEG    = r'<='
 t_EG       = r'=='
 t_NEG      = r'!='
-t_OR       = r'OR'
-t_AND      = r'AND'
 t_SEMICOLON= r';'
-t_SI       = r'SI'
-t_ALORS    = r'ALORS'
-t_SINON    = r'SINON'
+
 
 global res
 
