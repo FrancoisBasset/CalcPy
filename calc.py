@@ -36,6 +36,13 @@ t_SEMICOLON= r';'
 
 global res
 
+reserved = {
+   'if' : 'IF',
+   'then' : 'THEN',
+   'else' : 'ELSE',
+   'while' : 'WHILE'
+}
+
 def t_NUMBER(t):
     r'\d+'
     t.value = int(t.value)
