@@ -1,4 +1,4 @@
-Created by PLY version 3.7 (http://www.dabeaz.com/ply)
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Grammar
 
@@ -18,32 +18,36 @@ Rule 12    expression -> expression SUPEG expression
 Rule 13    expression -> expression INFEG expression
 Rule 14    expression -> expression EG expression
 Rule 15    expression -> expression NEG expression
-Rule 16    expression -> expression SI expression
-Rule 17    expression -> expression ALORS expression
-Rule 18    expression -> expression SINON expression
-Rule 19    expression -> MINUS expression
-Rule 20    expression -> LPAREN expression RPAREN
-Rule 21    expression -> NUMBER
-Rule 22    expression -> NAME
+Rule 16    expression -> expression OR expression
+Rule 17    expression -> expression AND expression
+Rule 18    expression -> expression SI expression
+Rule 19    expression -> expression ALORS expression
+Rule 20    expression -> expression SINON expression
+Rule 21    expression -> MINUS expression
+Rule 22    expression -> LPAREN expression RPAREN
+Rule 23    expression -> NUMBER
+Rule 24    expression -> NAME
 
 Terminals, with rules where they appear
 
-ALORS                : 17
+ALORS                : 19
+AND                  : 17
 DIVIDE               : 8
 EG                   : 14
 EQUALS               : 1 9
 INF                  : 11
 INFEG                : 13
-LPAREN               : 20
-MINUS                : 6 19
-NAME                 : 1 22
+LPAREN               : 22
+MINUS                : 6 21
+NAME                 : 1 24
 NEG                  : 15
-NUMBER               : 21
+NUMBER               : 23
+OR                   : 16
 PLUS                 : 5
-RPAREN               : 20
+RPAREN               : 22
 SEMICOLON            : 3
-SI                   : 16
-SINON                : 18
+SI                   : 18
+SINON                : 20
 SUP                  : 10
 SUPEG                : 12
 TIMES                : 7
@@ -51,7 +55,7 @@ error                :
 
 Nonterminals, with rules where they appear
 
-expression           : 1 2 3 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 20
+expression           : 1 2 3 5 5 6 6 7 7 8 8 9 9 10 10 11 11 12 12 13 13 14 14 15 15 16 16 17 17 18 18 19 19 20 20 21 22
 statement            : 3 0
 
 Parsing method: LALR
@@ -74,26 +78,62 @@ state 0
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
-    NAME            shift and go to state 4
+    NAME            shift and go to state 2
     $end            reduce using rule 4 (statement -> .)
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
 
-    statement                      shift and go to state 3
-    expression                     shift and go to state 2
+    statement                      shift and go to state 1
+    expression                     shift and go to state 5
 
 state 1
 
-    (20) expression -> LPAREN . expression RPAREN
+    (0) S' -> statement .
+
+
+
+state 2
+
+    (1) statement -> NAME . EQUALS expression
+    (24) expression -> NAME .
+
+  ! shift/reduce conflict for EQUALS resolved as shift
+    EQUALS          shift and go to state 7
+    SEMICOLON       reduce using rule 24 (expression -> NAME .)
+    PLUS            reduce using rule 24 (expression -> NAME .)
+    MINUS           reduce using rule 24 (expression -> NAME .)
+    TIMES           reduce using rule 24 (expression -> NAME .)
+    DIVIDE          reduce using rule 24 (expression -> NAME .)
+    SUP             reduce using rule 24 (expression -> NAME .)
+    INF             reduce using rule 24 (expression -> NAME .)
+    SUPEG           reduce using rule 24 (expression -> NAME .)
+    INFEG           reduce using rule 24 (expression -> NAME .)
+    EG              reduce using rule 24 (expression -> NAME .)
+    NEG             reduce using rule 24 (expression -> NAME .)
+    OR              reduce using rule 24 (expression -> NAME .)
+    AND             reduce using rule 24 (expression -> NAME .)
+    SI              reduce using rule 24 (expression -> NAME .)
+    ALORS           reduce using rule 24 (expression -> NAME .)
+    SINON           reduce using rule 24 (expression -> NAME .)
+    $end            reduce using rule 24 (expression -> NAME .)
+
+  ! EQUALS          [ reduce using rule 24 (expression -> NAME .) ]
+
+
+state 3
+
+    (22) expression -> LPAREN . expression RPAREN
     (5) expression -> . expression PLUS expression
     (6) expression -> . expression MINUS expression
     (7) expression -> . expression TIMES expression
@@ -105,22 +145,49 @@ state 1
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
     NAME            shift and go to state 8
 
-    expression                     shift and go to state 7
+    expression                     shift and go to state 9
 
-state 2
+state 4
+
+    (23) expression -> NUMBER .
+
+    PLUS            reduce using rule 23 (expression -> NUMBER .)
+    MINUS           reduce using rule 23 (expression -> NUMBER .)
+    TIMES           reduce using rule 23 (expression -> NUMBER .)
+    DIVIDE          reduce using rule 23 (expression -> NUMBER .)
+    EQUALS          reduce using rule 23 (expression -> NUMBER .)
+    SUP             reduce using rule 23 (expression -> NUMBER .)
+    INF             reduce using rule 23 (expression -> NUMBER .)
+    SUPEG           reduce using rule 23 (expression -> NUMBER .)
+    INFEG           reduce using rule 23 (expression -> NUMBER .)
+    EG              reduce using rule 23 (expression -> NUMBER .)
+    NEG             reduce using rule 23 (expression -> NUMBER .)
+    OR              reduce using rule 23 (expression -> NUMBER .)
+    AND             reduce using rule 23 (expression -> NUMBER .)
+    SI              reduce using rule 23 (expression -> NUMBER .)
+    ALORS           reduce using rule 23 (expression -> NUMBER .)
+    SINON           reduce using rule 23 (expression -> NUMBER .)
+    SEMICOLON       reduce using rule 23 (expression -> NUMBER .)
+    $end            reduce using rule 23 (expression -> NUMBER .)
+    RPAREN          reduce using rule 23 (expression -> NUMBER .)
+
+
+state 5
 
     (2) statement -> expression .
     (3) statement -> expression . SEMICOLON statement
@@ -135,86 +202,35 @@ state 2
     (13) expression -> expression . INFEG expression
     (14) expression -> expression . EG expression
     (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
 
     $end            reduce using rule 2 (statement -> expression .)
-    SEMICOLON       shift and go to state 12
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
+    SEMICOLON       shift and go to state 21
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
     DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-
-state 3
-
-    (0) S' -> statement .
-
-
-
-state 4
-
-    (1) statement -> NAME . EQUALS expression
-    (22) expression -> NAME .
-
-  ! shift/reduce conflict for EQUALS resolved as shift
-    EQUALS          shift and go to state 24
-    SEMICOLON       reduce using rule 22 (expression -> NAME .)
-    PLUS            reduce using rule 22 (expression -> NAME .)
-    MINUS           reduce using rule 22 (expression -> NAME .)
-    TIMES           reduce using rule 22 (expression -> NAME .)
-    DIVIDE          reduce using rule 22 (expression -> NAME .)
-    SUP             reduce using rule 22 (expression -> NAME .)
-    INF             reduce using rule 22 (expression -> NAME .)
-    SUPEG           reduce using rule 22 (expression -> NAME .)
-    INFEG           reduce using rule 22 (expression -> NAME .)
-    EG              reduce using rule 22 (expression -> NAME .)
-    NEG             reduce using rule 22 (expression -> NAME .)
-    SI              reduce using rule 22 (expression -> NAME .)
-    ALORS           reduce using rule 22 (expression -> NAME .)
-    SINON           reduce using rule 22 (expression -> NAME .)
-    $end            reduce using rule 22 (expression -> NAME .)
-
-  ! EQUALS          [ reduce using rule 22 (expression -> NAME .) ]
-
-
-state 5
-
-    (21) expression -> NUMBER .
-
-    PLUS            reduce using rule 21 (expression -> NUMBER .)
-    MINUS           reduce using rule 21 (expression -> NUMBER .)
-    TIMES           reduce using rule 21 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 21 (expression -> NUMBER .)
-    EQUALS          reduce using rule 21 (expression -> NUMBER .)
-    SUP             reduce using rule 21 (expression -> NUMBER .)
-    INF             reduce using rule 21 (expression -> NUMBER .)
-    SUPEG           reduce using rule 21 (expression -> NUMBER .)
-    INFEG           reduce using rule 21 (expression -> NUMBER .)
-    EG              reduce using rule 21 (expression -> NUMBER .)
-    NEG             reduce using rule 21 (expression -> NUMBER .)
-    SI              reduce using rule 21 (expression -> NUMBER .)
-    ALORS           reduce using rule 21 (expression -> NUMBER .)
-    SINON           reduce using rule 21 (expression -> NUMBER .)
-    SEMICOLON       reduce using rule 21 (expression -> NUMBER .)
-    $end            reduce using rule 21 (expression -> NUMBER .)
-    RPAREN          reduce using rule 21 (expression -> NUMBER .)
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
 
 
 state 6
 
-    (19) expression -> MINUS . expression
+    (21) expression -> MINUS . expression
     (5) expression -> . expression PLUS expression
     (6) expression -> . expression MINUS expression
     (7) expression -> . expression TIMES expression
@@ -226,24 +242,82 @@ state 6
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
     NAME            shift and go to state 8
 
-    expression                     shift and go to state 25
+    expression                     shift and go to state 27
 
 state 7
 
-    (20) expression -> LPAREN expression . RPAREN
+    (1) statement -> NAME EQUALS . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 28
+
+state 8
+
+    (24) expression -> NAME .
+
+    PLUS            reduce using rule 24 (expression -> NAME .)
+    MINUS           reduce using rule 24 (expression -> NAME .)
+    TIMES           reduce using rule 24 (expression -> NAME .)
+    DIVIDE          reduce using rule 24 (expression -> NAME .)
+    EQUALS          reduce using rule 24 (expression -> NAME .)
+    SUP             reduce using rule 24 (expression -> NAME .)
+    INF             reduce using rule 24 (expression -> NAME .)
+    SUPEG           reduce using rule 24 (expression -> NAME .)
+    INFEG           reduce using rule 24 (expression -> NAME .)
+    EG              reduce using rule 24 (expression -> NAME .)
+    NEG             reduce using rule 24 (expression -> NAME .)
+    OR              reduce using rule 24 (expression -> NAME .)
+    AND             reduce using rule 24 (expression -> NAME .)
+    SI              reduce using rule 24 (expression -> NAME .)
+    ALORS           reduce using rule 24 (expression -> NAME .)
+    SINON           reduce using rule 24 (expression -> NAME .)
+    SEMICOLON       reduce using rule 24 (expression -> NAME .)
+    $end            reduce using rule 24 (expression -> NAME .)
+    RPAREN          reduce using rule 24 (expression -> NAME .)
+
+
+state 9
+
+    (22) expression -> LPAREN expression . RPAREN
     (5) expression -> expression . PLUS expression
     (6) expression -> expression . MINUS expression
     (7) expression -> expression . TIMES expression
@@ -255,82 +329,34 @@ state 7
     (13) expression -> expression . INFEG expression
     (14) expression -> expression . EG expression
     (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
 
-    RPAREN          shift and go to state 26
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
+    RPAREN          shift and go to state 29
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
     DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
 
-
-state 8
-
-    (22) expression -> NAME .
-
-    PLUS            reduce using rule 22 (expression -> NAME .)
-    MINUS           reduce using rule 22 (expression -> NAME .)
-    TIMES           reduce using rule 22 (expression -> NAME .)
-    DIVIDE          reduce using rule 22 (expression -> NAME .)
-    EQUALS          reduce using rule 22 (expression -> NAME .)
-    SUP             reduce using rule 22 (expression -> NAME .)
-    INF             reduce using rule 22 (expression -> NAME .)
-    SUPEG           reduce using rule 22 (expression -> NAME .)
-    INFEG           reduce using rule 22 (expression -> NAME .)
-    EG              reduce using rule 22 (expression -> NAME .)
-    NEG             reduce using rule 22 (expression -> NAME .)
-    SI              reduce using rule 22 (expression -> NAME .)
-    ALORS           reduce using rule 22 (expression -> NAME .)
-    SINON           reduce using rule 22 (expression -> NAME .)
-    SEMICOLON       reduce using rule 22 (expression -> NAME .)
-    $end            reduce using rule 22 (expression -> NAME .)
-    RPAREN          reduce using rule 22 (expression -> NAME .)
-
-
-state 9
-
-    (5) expression -> expression PLUS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 27
 
 state 10
 
-    (12) expression -> expression SUPEG . expression
+    (9) expression -> expression EQUALS . expression
     (5) expression -> . expression PLUS expression
     (6) expression -> . expression MINUS expression
     (7) expression -> . expression TIMES expression
@@ -342,24 +368,26 @@ state 10
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
     NAME            shift and go to state 8
 
-    expression                     shift and go to state 28
+    expression                     shift and go to state 30
 
 state 11
 
-    (14) expression -> expression EG . expression
+    (11) expression -> expression INF . expression
     (5) expression -> . expression PLUS expression
     (6) expression -> . expression MINUS expression
     (7) expression -> . expression TIMES expression
@@ -371,22 +399,303 @@ state 11
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
     NAME            shift and go to state 8
 
-    expression                     shift and go to state 29
+    expression                     shift and go to state 31
 
 state 12
+
+    (10) expression -> expression SUP . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 32
+
+state 13
+
+    (15) expression -> expression NEG . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 33
+
+state 14
+
+    (7) expression -> expression TIMES . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 34
+
+state 15
+
+    (18) expression -> expression SI . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 35
+
+state 16
+
+    (6) expression -> expression MINUS . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 36
+
+state 17
+
+    (19) expression -> expression ALORS . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 37
+
+state 18
+
+    (13) expression -> expression INFEG . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 38
+
+state 19
+
+    (16) expression -> expression OR . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 39
+
+state 20
+
+    (8) expression -> expression DIVIDE . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 40
+
+state 21
 
     (3) statement -> expression SEMICOLON . statement
     (1) statement -> . NAME EQUALS expression
@@ -404,287 +713,28 @@ state 12
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
-    NAME            shift and go to state 4
+    NAME            shift and go to state 2
     $end            reduce using rule 4 (statement -> .)
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
 
-    statement                      shift and go to state 30
-    expression                     shift and go to state 2
-
-state 13
-
-    (17) expression -> expression ALORS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 31
-
-state 14
-
-    (16) expression -> expression SI . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 32
-
-state 15
-
-    (11) expression -> expression INF . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 33
-
-state 16
-
-    (10) expression -> expression SUP . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 34
-
-state 17
-
-    (13) expression -> expression INFEG . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 35
-
-state 18
-
-    (9) expression -> expression EQUALS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 36
-
-state 19
-
-    (18) expression -> expression SINON . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 37
-
-state 20
-
-    (8) expression -> expression DIVIDE . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 38
-
-state 21
-
-    (15) expression -> expression NEG . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 39
+    statement                      shift and go to state 41
+    expression                     shift and go to state 5
 
 state 22
 
-    (6) expression -> expression MINUS . expression
+    (20) expression -> expression SINON . expression
     (5) expression -> . expression PLUS expression
     (6) expression -> . expression MINUS expression
     (7) expression -> . expression TIMES expression
@@ -696,157 +746,150 @@ state 22
     (13) expression -> . expression INFEG expression
     (14) expression -> . expression EG expression
     (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
     MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 40
-
-state 23
-
-    (7) expression -> expression TIMES . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
-    NAME            shift and go to state 8
-
-    expression                     shift and go to state 41
-
-state 24
-
-    (1) statement -> NAME EQUALS . expression
-    (5) expression -> . expression PLUS expression
-    (6) expression -> . expression MINUS expression
-    (7) expression -> . expression TIMES expression
-    (8) expression -> . expression DIVIDE expression
-    (9) expression -> . expression EQUALS expression
-    (10) expression -> . expression SUP expression
-    (11) expression -> . expression INF expression
-    (12) expression -> . expression SUPEG expression
-    (13) expression -> . expression INFEG expression
-    (14) expression -> . expression EG expression
-    (15) expression -> . expression NEG expression
-    (16) expression -> . expression SI expression
-    (17) expression -> . expression ALORS expression
-    (18) expression -> . expression SINON expression
-    (19) expression -> . MINUS expression
-    (20) expression -> . LPAREN expression RPAREN
-    (21) expression -> . NUMBER
-    (22) expression -> . NAME
-
-    MINUS           shift and go to state 6
-    LPAREN          shift and go to state 1
-    NUMBER          shift and go to state 5
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
     NAME            shift and go to state 8
 
     expression                     shift and go to state 42
 
+state 23
+
+    (12) expression -> expression SUPEG . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 43
+
+state 24
+
+    (5) expression -> expression PLUS . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
+
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
+
+    expression                     shift and go to state 44
+
 state 25
 
-    (19) expression -> MINUS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
+    (14) expression -> expression EG . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
-    PLUS            reduce using rule 19 (expression -> MINUS expression .)
-    MINUS           reduce using rule 19 (expression -> MINUS expression .)
-    TIMES           reduce using rule 19 (expression -> MINUS expression .)
-    DIVIDE          reduce using rule 19 (expression -> MINUS expression .)
-    EQUALS          reduce using rule 19 (expression -> MINUS expression .)
-    SUP             reduce using rule 19 (expression -> MINUS expression .)
-    INF             reduce using rule 19 (expression -> MINUS expression .)
-    SUPEG           reduce using rule 19 (expression -> MINUS expression .)
-    INFEG           reduce using rule 19 (expression -> MINUS expression .)
-    EG              reduce using rule 19 (expression -> MINUS expression .)
-    NEG             reduce using rule 19 (expression -> MINUS expression .)
-    SI              reduce using rule 19 (expression -> MINUS expression .)
-    ALORS           reduce using rule 19 (expression -> MINUS expression .)
-    SINON           reduce using rule 19 (expression -> MINUS expression .)
-    SEMICOLON       reduce using rule 19 (expression -> MINUS expression .)
-    $end            reduce using rule 19 (expression -> MINUS expression .)
-    RPAREN          reduce using rule 19 (expression -> MINUS expression .)
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
 
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 22 ]
-  ! TIMES           [ shift and go to state 23 ]
-  ! DIVIDE          [ shift and go to state 20 ]
-  ! EQUALS          [ shift and go to state 18 ]
-  ! SUP             [ shift and go to state 16 ]
-  ! INF             [ shift and go to state 15 ]
-  ! SUPEG           [ shift and go to state 10 ]
-  ! INFEG           [ shift and go to state 17 ]
-  ! EG              [ shift and go to state 11 ]
-  ! NEG             [ shift and go to state 21 ]
-  ! SI              [ shift and go to state 14 ]
-  ! ALORS           [ shift and go to state 13 ]
-  ! SINON           [ shift and go to state 19 ]
-
+    expression                     shift and go to state 45
 
 state 26
 
-    (20) expression -> LPAREN expression RPAREN .
+    (17) expression -> expression AND . expression
+    (5) expression -> . expression PLUS expression
+    (6) expression -> . expression MINUS expression
+    (7) expression -> . expression TIMES expression
+    (8) expression -> . expression DIVIDE expression
+    (9) expression -> . expression EQUALS expression
+    (10) expression -> . expression SUP expression
+    (11) expression -> . expression INF expression
+    (12) expression -> . expression SUPEG expression
+    (13) expression -> . expression INFEG expression
+    (14) expression -> . expression EG expression
+    (15) expression -> . expression NEG expression
+    (16) expression -> . expression OR expression
+    (17) expression -> . expression AND expression
+    (18) expression -> . expression SI expression
+    (19) expression -> . expression ALORS expression
+    (20) expression -> . expression SINON expression
+    (21) expression -> . MINUS expression
+    (22) expression -> . LPAREN expression RPAREN
+    (23) expression -> . NUMBER
+    (24) expression -> . NAME
 
-    PLUS            reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    EQUALS          reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    SUP             reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    INF             reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    SUPEG           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    INFEG           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    EG              reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    NEG             reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    SI              reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    ALORS           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    SINON           reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    SEMICOLON       reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 20 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 20 (expression -> LPAREN expression RPAREN .)
+    MINUS           shift and go to state 6
+    LPAREN          shift and go to state 3
+    NUMBER          shift and go to state 4
+    NAME            shift and go to state 8
 
+    expression                     shift and go to state 46
 
 state 27
 
-    (5) expression -> expression PLUS expression .
+    (21) expression -> MINUS expression .
     (5) expression -> expression . PLUS expression
     (6) expression -> expression . MINUS expression
     (7) expression -> expression . TIMES expression
@@ -858,868 +901,51 @@ state 27
     (13) expression -> expression . INFEG expression
     (14) expression -> expression . EG expression
     (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
 
-    PLUS            reduce using rule 5 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 5 (expression -> expression PLUS expression .)
-    EQUALS          reduce using rule 5 (expression -> expression PLUS expression .)
-    SUP             reduce using rule 5 (expression -> expression PLUS expression .)
-    INF             reduce using rule 5 (expression -> expression PLUS expression .)
-    SUPEG           reduce using rule 5 (expression -> expression PLUS expression .)
-    INFEG           reduce using rule 5 (expression -> expression PLUS expression .)
-    EG              reduce using rule 5 (expression -> expression PLUS expression .)
-    NEG             reduce using rule 5 (expression -> expression PLUS expression .)
-    SI              reduce using rule 5 (expression -> expression PLUS expression .)
-    ALORS           reduce using rule 5 (expression -> expression PLUS expression .)
-    SINON           reduce using rule 5 (expression -> expression PLUS expression .)
-    SEMICOLON       reduce using rule 5 (expression -> expression PLUS expression .)
-    $end            reduce using rule 5 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 5 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
+    PLUS            reduce using rule 21 (expression -> MINUS expression .)
+    MINUS           reduce using rule 21 (expression -> MINUS expression .)
+    TIMES           reduce using rule 21 (expression -> MINUS expression .)
+    DIVIDE          reduce using rule 21 (expression -> MINUS expression .)
+    EQUALS          reduce using rule 21 (expression -> MINUS expression .)
+    SUP             reduce using rule 21 (expression -> MINUS expression .)
+    INF             reduce using rule 21 (expression -> MINUS expression .)
+    SUPEG           reduce using rule 21 (expression -> MINUS expression .)
+    INFEG           reduce using rule 21 (expression -> MINUS expression .)
+    EG              reduce using rule 21 (expression -> MINUS expression .)
+    NEG             reduce using rule 21 (expression -> MINUS expression .)
+    OR              reduce using rule 21 (expression -> MINUS expression .)
+    AND             reduce using rule 21 (expression -> MINUS expression .)
+    SI              reduce using rule 21 (expression -> MINUS expression .)
+    ALORS           reduce using rule 21 (expression -> MINUS expression .)
+    SINON           reduce using rule 21 (expression -> MINUS expression .)
+    SEMICOLON       reduce using rule 21 (expression -> MINUS expression .)
+    $end            reduce using rule 21 (expression -> MINUS expression .)
+    RPAREN          reduce using rule 21 (expression -> MINUS expression .)
 
-  ! TIMES           [ reduce using rule 5 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 5 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 22 ]
-  ! EQUALS          [ shift and go to state 18 ]
-  ! SUP             [ shift and go to state 16 ]
-  ! INF             [ shift and go to state 15 ]
-  ! SUPEG           [ shift and go to state 10 ]
-  ! INFEG           [ shift and go to state 17 ]
-  ! EG              [ shift and go to state 11 ]
-  ! NEG             [ shift and go to state 21 ]
-  ! SI              [ shift and go to state 14 ]
-  ! ALORS           [ shift and go to state 13 ]
-  ! SINON           [ shift and go to state 19 ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 16 ]
+  ! TIMES           [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 20 ]
+  ! EQUALS          [ shift and go to state 10 ]
+  ! SUP             [ shift and go to state 12 ]
+  ! INF             [ shift and go to state 11 ]
+  ! SUPEG           [ shift and go to state 23 ]
+  ! INFEG           [ shift and go to state 18 ]
+  ! EG              [ shift and go to state 25 ]
+  ! NEG             [ shift and go to state 13 ]
+  ! OR              [ shift and go to state 19 ]
+  ! AND             [ shift and go to state 26 ]
+  ! SI              [ shift and go to state 15 ]
+  ! ALORS           [ shift and go to state 17 ]
+  ! SINON           [ shift and go to state 22 ]
 
 
 state 28
-
-    (12) expression -> expression SUPEG expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 12 (expression -> expression SUPEG expression .)
-    $end            reduce using rule 12 (expression -> expression SUPEG expression .)
-    RPAREN          reduce using rule 12 (expression -> expression SUPEG expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! MINUS           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! TIMES           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! DIVIDE          [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! EQUALS          [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! SUP             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! INF             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! SUPEG           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! INFEG           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! EG              [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! NEG             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! SI              [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! ALORS           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-  ! SINON           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
-
-
-state 29
-
-    (14) expression -> expression EG expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 14 (expression -> expression EG expression .)
-    $end            reduce using rule 14 (expression -> expression EG expression .)
-    RPAREN          reduce using rule 14 (expression -> expression EG expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! MINUS           [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! TIMES           [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! DIVIDE          [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! EQUALS          [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! SUP             [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! INF             [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! SUPEG           [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! INFEG           [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! EG              [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! NEG             [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! SI              [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! ALORS           [ reduce using rule 14 (expression -> expression EG expression .) ]
-  ! SINON           [ reduce using rule 14 (expression -> expression EG expression .) ]
-
-
-state 30
-
-    (3) statement -> expression SEMICOLON statement .
-
-    $end            reduce using rule 3 (statement -> expression SEMICOLON statement .)
-
-
-state 31
-
-    (17) expression -> expression ALORS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 17 (expression -> expression ALORS expression .)
-    $end            reduce using rule 17 (expression -> expression ALORS expression .)
-    RPAREN          reduce using rule 17 (expression -> expression ALORS expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! MINUS           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! TIMES           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! DIVIDE          [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! EQUALS          [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! SUP             [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! INF             [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! SUPEG           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! INFEG           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! EG              [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! NEG             [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! SI              [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! ALORS           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-  ! SINON           [ reduce using rule 17 (expression -> expression ALORS expression .) ]
-
-
-state 32
-
-    (16) expression -> expression SI expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 16 (expression -> expression SI expression .)
-    $end            reduce using rule 16 (expression -> expression SI expression .)
-    RPAREN          reduce using rule 16 (expression -> expression SI expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! MINUS           [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! TIMES           [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! DIVIDE          [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! EQUALS          [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! SUP             [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! INF             [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! SUPEG           [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! INFEG           [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! EG              [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! NEG             [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! SI              [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! ALORS           [ reduce using rule 16 (expression -> expression SI expression .) ]
-  ! SINON           [ reduce using rule 16 (expression -> expression SI expression .) ]
-
-
-state 33
-
-    (11) expression -> expression INF expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 11 (expression -> expression INF expression .)
-    $end            reduce using rule 11 (expression -> expression INF expression .)
-    RPAREN          reduce using rule 11 (expression -> expression INF expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! MINUS           [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! TIMES           [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! DIVIDE          [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! EQUALS          [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! SUP             [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! INF             [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! SUPEG           [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! INFEG           [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! EG              [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! NEG             [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! SI              [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! ALORS           [ reduce using rule 11 (expression -> expression INF expression .) ]
-  ! SINON           [ reduce using rule 11 (expression -> expression INF expression .) ]
-
-
-state 34
-
-    (10) expression -> expression SUP expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 10 (expression -> expression SUP expression .)
-    $end            reduce using rule 10 (expression -> expression SUP expression .)
-    RPAREN          reduce using rule 10 (expression -> expression SUP expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! MINUS           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! TIMES           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! DIVIDE          [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! EQUALS          [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! SUP             [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! INF             [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! SUPEG           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! INFEG           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! EG              [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! NEG             [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! SI              [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! ALORS           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-  ! SINON           [ reduce using rule 10 (expression -> expression SUP expression .) ]
-
-
-state 35
-
-    (13) expression -> expression INFEG expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 13 (expression -> expression INFEG expression .)
-    $end            reduce using rule 13 (expression -> expression INFEG expression .)
-    RPAREN          reduce using rule 13 (expression -> expression INFEG expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! MINUS           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! TIMES           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! DIVIDE          [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! EQUALS          [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! SUP             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! INF             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! SUPEG           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! INFEG           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! EG              [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! NEG             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! SI              [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! ALORS           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-  ! SINON           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
-
-
-state 36
-
-    (9) expression -> expression EQUALS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 9 (expression -> expression EQUALS expression .)
-    $end            reduce using rule 9 (expression -> expression EQUALS expression .)
-    RPAREN          reduce using rule 9 (expression -> expression EQUALS expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! MINUS           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! TIMES           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! DIVIDE          [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! EQUALS          [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! SUP             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! INF             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! SUPEG           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! INFEG           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! EG              [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! NEG             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! SI              [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! ALORS           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-  ! SINON           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
-
-
-state 37
-
-    (18) expression -> expression SINON expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 18 (expression -> expression SINON expression .)
-    $end            reduce using rule 18 (expression -> expression SINON expression .)
-    RPAREN          reduce using rule 18 (expression -> expression SINON expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! MINUS           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! TIMES           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! DIVIDE          [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! EQUALS          [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! SUP             [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! INF             [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! SUPEG           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! INFEG           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! EG              [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! NEG             [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! SI              [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! ALORS           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-  ! SINON           [ reduce using rule 18 (expression -> expression SINON expression .) ]
-
-
-state 38
-
-    (8) expression -> expression DIVIDE expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-    PLUS            reduce using rule 8 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 8 (expression -> expression DIVIDE expression .)
-    EQUALS          reduce using rule 8 (expression -> expression DIVIDE expression .)
-    SUP             reduce using rule 8 (expression -> expression DIVIDE expression .)
-    INF             reduce using rule 8 (expression -> expression DIVIDE expression .)
-    SUPEG           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    INFEG           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    EG              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    NEG             reduce using rule 8 (expression -> expression DIVIDE expression .)
-    SI              reduce using rule 8 (expression -> expression DIVIDE expression .)
-    ALORS           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    SINON           reduce using rule 8 (expression -> expression DIVIDE expression .)
-    SEMICOLON       reduce using rule 8 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 8 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 8 (expression -> expression DIVIDE expression .)
-
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 22 ]
-  ! TIMES           [ shift and go to state 23 ]
-  ! DIVIDE          [ shift and go to state 20 ]
-  ! EQUALS          [ shift and go to state 18 ]
-  ! SUP             [ shift and go to state 16 ]
-  ! INF             [ shift and go to state 15 ]
-  ! SUPEG           [ shift and go to state 10 ]
-  ! INFEG           [ shift and go to state 17 ]
-  ! EG              [ shift and go to state 11 ]
-  ! NEG             [ shift and go to state 21 ]
-  ! SI              [ shift and go to state 14 ]
-  ! ALORS           [ shift and go to state 13 ]
-  ! SINON           [ shift and go to state 19 ]
-
-
-state 39
-
-    (15) expression -> expression NEG expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-  ! shift/reduce conflict for PLUS resolved as shift
-  ! shift/reduce conflict for MINUS resolved as shift
-  ! shift/reduce conflict for TIMES resolved as shift
-  ! shift/reduce conflict for DIVIDE resolved as shift
-  ! shift/reduce conflict for EQUALS resolved as shift
-  ! shift/reduce conflict for SUP resolved as shift
-  ! shift/reduce conflict for INF resolved as shift
-  ! shift/reduce conflict for SUPEG resolved as shift
-  ! shift/reduce conflict for INFEG resolved as shift
-  ! shift/reduce conflict for EG resolved as shift
-  ! shift/reduce conflict for NEG resolved as shift
-  ! shift/reduce conflict for SI resolved as shift
-  ! shift/reduce conflict for ALORS resolved as shift
-  ! shift/reduce conflict for SINON resolved as shift
-    SEMICOLON       reduce using rule 15 (expression -> expression NEG expression .)
-    $end            reduce using rule 15 (expression -> expression NEG expression .)
-    RPAREN          reduce using rule 15 (expression -> expression NEG expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
-
-  ! PLUS            [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! MINUS           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! TIMES           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! DIVIDE          [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! EQUALS          [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! SUP             [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! INF             [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! SUPEG           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! INFEG           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! EG              [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! NEG             [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! SI              [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! ALORS           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-  ! SINON           [ reduce using rule 15 (expression -> expression NEG expression .) ]
-
-
-state 40
-
-    (6) expression -> expression MINUS expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-    PLUS            reduce using rule 6 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 6 (expression -> expression MINUS expression .)
-    EQUALS          reduce using rule 6 (expression -> expression MINUS expression .)
-    SUP             reduce using rule 6 (expression -> expression MINUS expression .)
-    INF             reduce using rule 6 (expression -> expression MINUS expression .)
-    SUPEG           reduce using rule 6 (expression -> expression MINUS expression .)
-    INFEG           reduce using rule 6 (expression -> expression MINUS expression .)
-    EG              reduce using rule 6 (expression -> expression MINUS expression .)
-    NEG             reduce using rule 6 (expression -> expression MINUS expression .)
-    SI              reduce using rule 6 (expression -> expression MINUS expression .)
-    ALORS           reduce using rule 6 (expression -> expression MINUS expression .)
-    SINON           reduce using rule 6 (expression -> expression MINUS expression .)
-    SEMICOLON       reduce using rule 6 (expression -> expression MINUS expression .)
-    $end            reduce using rule 6 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 6 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 23
-    DIVIDE          shift and go to state 20
-
-  ! TIMES           [ reduce using rule 6 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 6 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 22 ]
-  ! EQUALS          [ shift and go to state 18 ]
-  ! SUP             [ shift and go to state 16 ]
-  ! INF             [ shift and go to state 15 ]
-  ! SUPEG           [ shift and go to state 10 ]
-  ! INFEG           [ shift and go to state 17 ]
-  ! EG              [ shift and go to state 11 ]
-  ! NEG             [ shift and go to state 21 ]
-  ! SI              [ shift and go to state 14 ]
-  ! ALORS           [ shift and go to state 13 ]
-  ! SINON           [ shift and go to state 19 ]
-
-
-state 41
-
-    (7) expression -> expression TIMES expression .
-    (5) expression -> expression . PLUS expression
-    (6) expression -> expression . MINUS expression
-    (7) expression -> expression . TIMES expression
-    (8) expression -> expression . DIVIDE expression
-    (9) expression -> expression . EQUALS expression
-    (10) expression -> expression . SUP expression
-    (11) expression -> expression . INF expression
-    (12) expression -> expression . SUPEG expression
-    (13) expression -> expression . INFEG expression
-    (14) expression -> expression . EG expression
-    (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
-
-    PLUS            reduce using rule 7 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 7 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 7 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 7 (expression -> expression TIMES expression .)
-    EQUALS          reduce using rule 7 (expression -> expression TIMES expression .)
-    SUP             reduce using rule 7 (expression -> expression TIMES expression .)
-    INF             reduce using rule 7 (expression -> expression TIMES expression .)
-    SUPEG           reduce using rule 7 (expression -> expression TIMES expression .)
-    INFEG           reduce using rule 7 (expression -> expression TIMES expression .)
-    EG              reduce using rule 7 (expression -> expression TIMES expression .)
-    NEG             reduce using rule 7 (expression -> expression TIMES expression .)
-    SI              reduce using rule 7 (expression -> expression TIMES expression .)
-    ALORS           reduce using rule 7 (expression -> expression TIMES expression .)
-    SINON           reduce using rule 7 (expression -> expression TIMES expression .)
-    SEMICOLON       reduce using rule 7 (expression -> expression TIMES expression .)
-    $end            reduce using rule 7 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 7 (expression -> expression TIMES expression .)
-
-  ! PLUS            [ shift and go to state 9 ]
-  ! MINUS           [ shift and go to state 22 ]
-  ! TIMES           [ shift and go to state 23 ]
-  ! DIVIDE          [ shift and go to state 20 ]
-  ! EQUALS          [ shift and go to state 18 ]
-  ! SUP             [ shift and go to state 16 ]
-  ! INF             [ shift and go to state 15 ]
-  ! SUPEG           [ shift and go to state 10 ]
-  ! INFEG           [ shift and go to state 17 ]
-  ! EG              [ shift and go to state 11 ]
-  ! NEG             [ shift and go to state 21 ]
-  ! SI              [ shift and go to state 14 ]
-  ! ALORS           [ shift and go to state 13 ]
-  ! SINON           [ shift and go to state 19 ]
-
-
-state 42
 
     (1) statement -> NAME EQUALS expression .
     (5) expression -> expression . PLUS expression
@@ -1733,58 +959,1202 @@ state 42
     (13) expression -> expression . INFEG expression
     (14) expression -> expression . EG expression
     (15) expression -> expression . NEG expression
-    (16) expression -> expression . SI expression
-    (17) expression -> expression . ALORS expression
-    (18) expression -> expression . SINON expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
 
     $end            reduce using rule 1 (statement -> NAME EQUALS expression .)
-    PLUS            shift and go to state 9
-    MINUS           shift and go to state 22
-    TIMES           shift and go to state 23
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
     DIVIDE          shift and go to state 20
-    EQUALS          shift and go to state 18
-    SUP             shift and go to state 16
-    INF             shift and go to state 15
-    SUPEG           shift and go to state 10
-    INFEG           shift and go to state 17
-    EG              shift and go to state 11
-    NEG             shift and go to state 21
-    SI              shift and go to state 14
-    ALORS           shift and go to state 13
-    SINON           shift and go to state 19
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+
+state 29
+
+    (22) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    EQUALS          reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    SUP             reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    INF             reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    SUPEG           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    INFEG           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    EG              reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    NEG             reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    OR              reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    AND             reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    SI              reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    ALORS           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    SINON           reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 22 (expression -> LPAREN expression RPAREN .)
+
+
+state 30
+
+    (9) expression -> expression EQUALS expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 9 (expression -> expression EQUALS expression .)
+    $end            reduce using rule 9 (expression -> expression EQUALS expression .)
+    RPAREN          reduce using rule 9 (expression -> expression EQUALS expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! MINUS           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! TIMES           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! DIVIDE          [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! EQUALS          [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! SUP             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! INF             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! SUPEG           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! INFEG           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! EG              [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! NEG             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! OR              [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! AND             [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! SI              [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! ALORS           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+  ! SINON           [ reduce using rule 9 (expression -> expression EQUALS expression .) ]
+
+
+state 31
+
+    (11) expression -> expression INF expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 11 (expression -> expression INF expression .)
+    $end            reduce using rule 11 (expression -> expression INF expression .)
+    RPAREN          reduce using rule 11 (expression -> expression INF expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! MINUS           [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! TIMES           [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! DIVIDE          [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! EQUALS          [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! SUP             [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! INF             [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! SUPEG           [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! INFEG           [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! EG              [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! NEG             [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! OR              [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! AND             [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! SI              [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! ALORS           [ reduce using rule 11 (expression -> expression INF expression .) ]
+  ! SINON           [ reduce using rule 11 (expression -> expression INF expression .) ]
+
+
+state 32
+
+    (10) expression -> expression SUP expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 10 (expression -> expression SUP expression .)
+    $end            reduce using rule 10 (expression -> expression SUP expression .)
+    RPAREN          reduce using rule 10 (expression -> expression SUP expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! MINUS           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! TIMES           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! DIVIDE          [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! EQUALS          [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! SUP             [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! INF             [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! SUPEG           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! INFEG           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! EG              [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! NEG             [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! OR              [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! AND             [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! SI              [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! ALORS           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+  ! SINON           [ reduce using rule 10 (expression -> expression SUP expression .) ]
+
+
+state 33
+
+    (15) expression -> expression NEG expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 15 (expression -> expression NEG expression .)
+    $end            reduce using rule 15 (expression -> expression NEG expression .)
+    RPAREN          reduce using rule 15 (expression -> expression NEG expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! MINUS           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! TIMES           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! DIVIDE          [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! EQUALS          [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! SUP             [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! INF             [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! SUPEG           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! INFEG           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! EG              [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! NEG             [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! OR              [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! AND             [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! SI              [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! ALORS           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+  ! SINON           [ reduce using rule 15 (expression -> expression NEG expression .) ]
+
+
+state 34
+
+    (7) expression -> expression TIMES expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+    PLUS            reduce using rule 7 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 7 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 7 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 7 (expression -> expression TIMES expression .)
+    EQUALS          reduce using rule 7 (expression -> expression TIMES expression .)
+    SUP             reduce using rule 7 (expression -> expression TIMES expression .)
+    INF             reduce using rule 7 (expression -> expression TIMES expression .)
+    SUPEG           reduce using rule 7 (expression -> expression TIMES expression .)
+    INFEG           reduce using rule 7 (expression -> expression TIMES expression .)
+    EG              reduce using rule 7 (expression -> expression TIMES expression .)
+    NEG             reduce using rule 7 (expression -> expression TIMES expression .)
+    OR              reduce using rule 7 (expression -> expression TIMES expression .)
+    AND             reduce using rule 7 (expression -> expression TIMES expression .)
+    SI              reduce using rule 7 (expression -> expression TIMES expression .)
+    ALORS           reduce using rule 7 (expression -> expression TIMES expression .)
+    SINON           reduce using rule 7 (expression -> expression TIMES expression .)
+    SEMICOLON       reduce using rule 7 (expression -> expression TIMES expression .)
+    $end            reduce using rule 7 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 7 (expression -> expression TIMES expression .)
+
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 16 ]
+  ! TIMES           [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 20 ]
+  ! EQUALS          [ shift and go to state 10 ]
+  ! SUP             [ shift and go to state 12 ]
+  ! INF             [ shift and go to state 11 ]
+  ! SUPEG           [ shift and go to state 23 ]
+  ! INFEG           [ shift and go to state 18 ]
+  ! EG              [ shift and go to state 25 ]
+  ! NEG             [ shift and go to state 13 ]
+  ! OR              [ shift and go to state 19 ]
+  ! AND             [ shift and go to state 26 ]
+  ! SI              [ shift and go to state 15 ]
+  ! ALORS           [ shift and go to state 17 ]
+  ! SINON           [ shift and go to state 22 ]
+
+
+state 35
+
+    (18) expression -> expression SI expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 18 (expression -> expression SI expression .)
+    $end            reduce using rule 18 (expression -> expression SI expression .)
+    RPAREN          reduce using rule 18 (expression -> expression SI expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! MINUS           [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! TIMES           [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! DIVIDE          [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! EQUALS          [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! SUP             [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! INF             [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! SUPEG           [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! INFEG           [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! EG              [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! NEG             [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! OR              [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! AND             [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! SI              [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! ALORS           [ reduce using rule 18 (expression -> expression SI expression .) ]
+  ! SINON           [ reduce using rule 18 (expression -> expression SI expression .) ]
+
+
+state 36
+
+    (6) expression -> expression MINUS expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+    PLUS            reduce using rule 6 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 6 (expression -> expression MINUS expression .)
+    EQUALS          reduce using rule 6 (expression -> expression MINUS expression .)
+    SUP             reduce using rule 6 (expression -> expression MINUS expression .)
+    INF             reduce using rule 6 (expression -> expression MINUS expression .)
+    SUPEG           reduce using rule 6 (expression -> expression MINUS expression .)
+    INFEG           reduce using rule 6 (expression -> expression MINUS expression .)
+    EG              reduce using rule 6 (expression -> expression MINUS expression .)
+    NEG             reduce using rule 6 (expression -> expression MINUS expression .)
+    OR              reduce using rule 6 (expression -> expression MINUS expression .)
+    AND             reduce using rule 6 (expression -> expression MINUS expression .)
+    SI              reduce using rule 6 (expression -> expression MINUS expression .)
+    ALORS           reduce using rule 6 (expression -> expression MINUS expression .)
+    SINON           reduce using rule 6 (expression -> expression MINUS expression .)
+    SEMICOLON       reduce using rule 6 (expression -> expression MINUS expression .)
+    $end            reduce using rule 6 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 6 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+
+  ! TIMES           [ reduce using rule 6 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 6 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 16 ]
+  ! EQUALS          [ shift and go to state 10 ]
+  ! SUP             [ shift and go to state 12 ]
+  ! INF             [ shift and go to state 11 ]
+  ! SUPEG           [ shift and go to state 23 ]
+  ! INFEG           [ shift and go to state 18 ]
+  ! EG              [ shift and go to state 25 ]
+  ! NEG             [ shift and go to state 13 ]
+  ! OR              [ shift and go to state 19 ]
+  ! AND             [ shift and go to state 26 ]
+  ! SI              [ shift and go to state 15 ]
+  ! ALORS           [ shift and go to state 17 ]
+  ! SINON           [ shift and go to state 22 ]
+
+
+state 37
+
+    (19) expression -> expression ALORS expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 19 (expression -> expression ALORS expression .)
+    $end            reduce using rule 19 (expression -> expression ALORS expression .)
+    RPAREN          reduce using rule 19 (expression -> expression ALORS expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! MINUS           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! TIMES           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! DIVIDE          [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! EQUALS          [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! SUP             [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! INF             [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! SUPEG           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! INFEG           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! EG              [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! NEG             [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! OR              [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! AND             [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! SI              [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! ALORS           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+  ! SINON           [ reduce using rule 19 (expression -> expression ALORS expression .) ]
+
+
+state 38
+
+    (13) expression -> expression INFEG expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 13 (expression -> expression INFEG expression .)
+    $end            reduce using rule 13 (expression -> expression INFEG expression .)
+    RPAREN          reduce using rule 13 (expression -> expression INFEG expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! MINUS           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! TIMES           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! DIVIDE          [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! EQUALS          [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! SUP             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! INF             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! SUPEG           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! INFEG           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! EG              [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! NEG             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! OR              [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! AND             [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! SI              [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! ALORS           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+  ! SINON           [ reduce using rule 13 (expression -> expression INFEG expression .) ]
+
+
+state 39
+
+    (16) expression -> expression OR expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 16 (expression -> expression OR expression .)
+    $end            reduce using rule 16 (expression -> expression OR expression .)
+    RPAREN          reduce using rule 16 (expression -> expression OR expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! MINUS           [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! TIMES           [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! DIVIDE          [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! EQUALS          [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! SUP             [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! INF             [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! SUPEG           [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! INFEG           [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! EG              [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! NEG             [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! OR              [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! AND             [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! SI              [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! ALORS           [ reduce using rule 16 (expression -> expression OR expression .) ]
+  ! SINON           [ reduce using rule 16 (expression -> expression OR expression .) ]
+
+
+state 40
+
+    (8) expression -> expression DIVIDE expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+    PLUS            reduce using rule 8 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 8 (expression -> expression DIVIDE expression .)
+    EQUALS          reduce using rule 8 (expression -> expression DIVIDE expression .)
+    SUP             reduce using rule 8 (expression -> expression DIVIDE expression .)
+    INF             reduce using rule 8 (expression -> expression DIVIDE expression .)
+    SUPEG           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    INFEG           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    EG              reduce using rule 8 (expression -> expression DIVIDE expression .)
+    NEG             reduce using rule 8 (expression -> expression DIVIDE expression .)
+    OR              reduce using rule 8 (expression -> expression DIVIDE expression .)
+    AND             reduce using rule 8 (expression -> expression DIVIDE expression .)
+    SI              reduce using rule 8 (expression -> expression DIVIDE expression .)
+    ALORS           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    SINON           reduce using rule 8 (expression -> expression DIVIDE expression .)
+    SEMICOLON       reduce using rule 8 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 8 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 8 (expression -> expression DIVIDE expression .)
+
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 16 ]
+  ! TIMES           [ shift and go to state 14 ]
+  ! DIVIDE          [ shift and go to state 20 ]
+  ! EQUALS          [ shift and go to state 10 ]
+  ! SUP             [ shift and go to state 12 ]
+  ! INF             [ shift and go to state 11 ]
+  ! SUPEG           [ shift and go to state 23 ]
+  ! INFEG           [ shift and go to state 18 ]
+  ! EG              [ shift and go to state 25 ]
+  ! NEG             [ shift and go to state 13 ]
+  ! OR              [ shift and go to state 19 ]
+  ! AND             [ shift and go to state 26 ]
+  ! SI              [ shift and go to state 15 ]
+  ! ALORS           [ shift and go to state 17 ]
+  ! SINON           [ shift and go to state 22 ]
+
+
+state 41
+
+    (3) statement -> expression SEMICOLON statement .
+
+    $end            reduce using rule 3 (statement -> expression SEMICOLON statement .)
+
+
+state 42
+
+    (20) expression -> expression SINON expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 20 (expression -> expression SINON expression .)
+    $end            reduce using rule 20 (expression -> expression SINON expression .)
+    RPAREN          reduce using rule 20 (expression -> expression SINON expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! MINUS           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! TIMES           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! DIVIDE          [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! EQUALS          [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! SUP             [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! INF             [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! SUPEG           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! INFEG           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! EG              [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! NEG             [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! OR              [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! AND             [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! SI              [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! ALORS           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+  ! SINON           [ reduce using rule 20 (expression -> expression SINON expression .) ]
+
+
+state 43
+
+    (12) expression -> expression SUPEG expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 12 (expression -> expression SUPEG expression .)
+    $end            reduce using rule 12 (expression -> expression SUPEG expression .)
+    RPAREN          reduce using rule 12 (expression -> expression SUPEG expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! MINUS           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! TIMES           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! DIVIDE          [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! EQUALS          [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! SUP             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! INF             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! SUPEG           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! INFEG           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! EG              [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! NEG             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! OR              [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! AND             [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! SI              [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! ALORS           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+  ! SINON           [ reduce using rule 12 (expression -> expression SUPEG expression .) ]
+
+
+state 44
+
+    (5) expression -> expression PLUS expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+    PLUS            reduce using rule 5 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 5 (expression -> expression PLUS expression .)
+    EQUALS          reduce using rule 5 (expression -> expression PLUS expression .)
+    SUP             reduce using rule 5 (expression -> expression PLUS expression .)
+    INF             reduce using rule 5 (expression -> expression PLUS expression .)
+    SUPEG           reduce using rule 5 (expression -> expression PLUS expression .)
+    INFEG           reduce using rule 5 (expression -> expression PLUS expression .)
+    EG              reduce using rule 5 (expression -> expression PLUS expression .)
+    NEG             reduce using rule 5 (expression -> expression PLUS expression .)
+    OR              reduce using rule 5 (expression -> expression PLUS expression .)
+    AND             reduce using rule 5 (expression -> expression PLUS expression .)
+    SI              reduce using rule 5 (expression -> expression PLUS expression .)
+    ALORS           reduce using rule 5 (expression -> expression PLUS expression .)
+    SINON           reduce using rule 5 (expression -> expression PLUS expression .)
+    SEMICOLON       reduce using rule 5 (expression -> expression PLUS expression .)
+    $end            reduce using rule 5 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 5 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+
+  ! TIMES           [ reduce using rule 5 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 5 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 24 ]
+  ! MINUS           [ shift and go to state 16 ]
+  ! EQUALS          [ shift and go to state 10 ]
+  ! SUP             [ shift and go to state 12 ]
+  ! INF             [ shift and go to state 11 ]
+  ! SUPEG           [ shift and go to state 23 ]
+  ! INFEG           [ shift and go to state 18 ]
+  ! EG              [ shift and go to state 25 ]
+  ! NEG             [ shift and go to state 13 ]
+  ! OR              [ shift and go to state 19 ]
+  ! AND             [ shift and go to state 26 ]
+  ! SI              [ shift and go to state 15 ]
+  ! ALORS           [ shift and go to state 17 ]
+  ! SINON           [ shift and go to state 22 ]
+
+
+state 45
+
+    (14) expression -> expression EG expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 14 (expression -> expression EG expression .)
+    $end            reduce using rule 14 (expression -> expression EG expression .)
+    RPAREN          reduce using rule 14 (expression -> expression EG expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! MINUS           [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! TIMES           [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! DIVIDE          [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! EQUALS          [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! SUP             [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! INF             [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! SUPEG           [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! INFEG           [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! EG              [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! NEG             [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! OR              [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! AND             [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! SI              [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! ALORS           [ reduce using rule 14 (expression -> expression EG expression .) ]
+  ! SINON           [ reduce using rule 14 (expression -> expression EG expression .) ]
+
+
+state 46
+
+    (17) expression -> expression AND expression .
+    (5) expression -> expression . PLUS expression
+    (6) expression -> expression . MINUS expression
+    (7) expression -> expression . TIMES expression
+    (8) expression -> expression . DIVIDE expression
+    (9) expression -> expression . EQUALS expression
+    (10) expression -> expression . SUP expression
+    (11) expression -> expression . INF expression
+    (12) expression -> expression . SUPEG expression
+    (13) expression -> expression . INFEG expression
+    (14) expression -> expression . EG expression
+    (15) expression -> expression . NEG expression
+    (16) expression -> expression . OR expression
+    (17) expression -> expression . AND expression
+    (18) expression -> expression . SI expression
+    (19) expression -> expression . ALORS expression
+    (20) expression -> expression . SINON expression
+
+  ! shift/reduce conflict for PLUS resolved as shift
+  ! shift/reduce conflict for MINUS resolved as shift
+  ! shift/reduce conflict for TIMES resolved as shift
+  ! shift/reduce conflict for DIVIDE resolved as shift
+  ! shift/reduce conflict for EQUALS resolved as shift
+  ! shift/reduce conflict for SUP resolved as shift
+  ! shift/reduce conflict for INF resolved as shift
+  ! shift/reduce conflict for SUPEG resolved as shift
+  ! shift/reduce conflict for INFEG resolved as shift
+  ! shift/reduce conflict for EG resolved as shift
+  ! shift/reduce conflict for NEG resolved as shift
+  ! shift/reduce conflict for OR resolved as shift
+  ! shift/reduce conflict for AND resolved as shift
+  ! shift/reduce conflict for SI resolved as shift
+  ! shift/reduce conflict for ALORS resolved as shift
+  ! shift/reduce conflict for SINON resolved as shift
+    SEMICOLON       reduce using rule 17 (expression -> expression AND expression .)
+    $end            reduce using rule 17 (expression -> expression AND expression .)
+    RPAREN          reduce using rule 17 (expression -> expression AND expression .)
+    PLUS            shift and go to state 24
+    MINUS           shift and go to state 16
+    TIMES           shift and go to state 14
+    DIVIDE          shift and go to state 20
+    EQUALS          shift and go to state 10
+    SUP             shift and go to state 12
+    INF             shift and go to state 11
+    SUPEG           shift and go to state 23
+    INFEG           shift and go to state 18
+    EG              shift and go to state 25
+    NEG             shift and go to state 13
+    OR              shift and go to state 19
+    AND             shift and go to state 26
+    SI              shift and go to state 15
+    ALORS           shift and go to state 17
+    SINON           shift and go to state 22
+
+  ! PLUS            [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! MINUS           [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! TIMES           [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! DIVIDE          [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! EQUALS          [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SUP             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! INF             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SUPEG           [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! INFEG           [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! EG              [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! NEG             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! OR              [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! AND             [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SI              [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! ALORS           [ reduce using rule 17 (expression -> expression AND expression .) ]
+  ! SINON           [ reduce using rule 17 (expression -> expression AND expression .) ]
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for EQUALS in state 4 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 28 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 28 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 28 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 28 resolved as shift
-WARNING: shift/reduce conflict for EQUALS in state 28 resolved as shift
-WARNING: shift/reduce conflict for SUP in state 28 resolved as shift
-WARNING: shift/reduce conflict for INF in state 28 resolved as shift
-WARNING: shift/reduce conflict for SUPEG in state 28 resolved as shift
-WARNING: shift/reduce conflict for INFEG in state 28 resolved as shift
-WARNING: shift/reduce conflict for EG in state 28 resolved as shift
-WARNING: shift/reduce conflict for NEG in state 28 resolved as shift
-WARNING: shift/reduce conflict for SI in state 28 resolved as shift
-WARNING: shift/reduce conflict for ALORS in state 28 resolved as shift
-WARNING: shift/reduce conflict for SINON in state 28 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 29 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 29 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 29 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 29 resolved as shift
-WARNING: shift/reduce conflict for EQUALS in state 29 resolved as shift
-WARNING: shift/reduce conflict for SUP in state 29 resolved as shift
-WARNING: shift/reduce conflict for INF in state 29 resolved as shift
-WARNING: shift/reduce conflict for SUPEG in state 29 resolved as shift
-WARNING: shift/reduce conflict for INFEG in state 29 resolved as shift
-WARNING: shift/reduce conflict for EG in state 29 resolved as shift
-WARNING: shift/reduce conflict for NEG in state 29 resolved as shift
-WARNING: shift/reduce conflict for SI in state 29 resolved as shift
-WARNING: shift/reduce conflict for ALORS in state 29 resolved as shift
-WARNING: shift/reduce conflict for SINON in state 29 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 2 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 30 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 30 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 30 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 30 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 30 resolved as shift
+WARNING: shift/reduce conflict for INF in state 30 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 30 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 30 resolved as shift
+WARNING: shift/reduce conflict for EG in state 30 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 30 resolved as shift
+WARNING: shift/reduce conflict for OR in state 30 resolved as shift
+WARNING: shift/reduce conflict for AND in state 30 resolved as shift
+WARNING: shift/reduce conflict for SI in state 30 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 30 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 30 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 31 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 31 resolved as shift
 WARNING: shift/reduce conflict for TIMES in state 31 resolved as shift
@@ -1796,6 +2166,8 @@ WARNING: shift/reduce conflict for SUPEG in state 31 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 31 resolved as shift
 WARNING: shift/reduce conflict for EG in state 31 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 31 resolved as shift
+WARNING: shift/reduce conflict for OR in state 31 resolved as shift
+WARNING: shift/reduce conflict for AND in state 31 resolved as shift
 WARNING: shift/reduce conflict for SI in state 31 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 31 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 31 resolved as shift
@@ -1810,6 +2182,8 @@ WARNING: shift/reduce conflict for SUPEG in state 32 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 32 resolved as shift
 WARNING: shift/reduce conflict for EG in state 32 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 32 resolved as shift
+WARNING: shift/reduce conflict for OR in state 32 resolved as shift
+WARNING: shift/reduce conflict for AND in state 32 resolved as shift
 WARNING: shift/reduce conflict for SI in state 32 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 32 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 32 resolved as shift
@@ -1824,23 +2198,11 @@ WARNING: shift/reduce conflict for SUPEG in state 33 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 33 resolved as shift
 WARNING: shift/reduce conflict for EG in state 33 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 33 resolved as shift
+WARNING: shift/reduce conflict for OR in state 33 resolved as shift
+WARNING: shift/reduce conflict for AND in state 33 resolved as shift
 WARNING: shift/reduce conflict for SI in state 33 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 33 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 33 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 34 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 34 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 34 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 34 resolved as shift
-WARNING: shift/reduce conflict for EQUALS in state 34 resolved as shift
-WARNING: shift/reduce conflict for SUP in state 34 resolved as shift
-WARNING: shift/reduce conflict for INF in state 34 resolved as shift
-WARNING: shift/reduce conflict for SUPEG in state 34 resolved as shift
-WARNING: shift/reduce conflict for INFEG in state 34 resolved as shift
-WARNING: shift/reduce conflict for EG in state 34 resolved as shift
-WARNING: shift/reduce conflict for NEG in state 34 resolved as shift
-WARNING: shift/reduce conflict for SI in state 34 resolved as shift
-WARNING: shift/reduce conflict for ALORS in state 34 resolved as shift
-WARNING: shift/reduce conflict for SINON in state 34 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 35 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 35 resolved as shift
 WARNING: shift/reduce conflict for TIMES in state 35 resolved as shift
@@ -1852,23 +2214,11 @@ WARNING: shift/reduce conflict for SUPEG in state 35 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 35 resolved as shift
 WARNING: shift/reduce conflict for EG in state 35 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 35 resolved as shift
+WARNING: shift/reduce conflict for OR in state 35 resolved as shift
+WARNING: shift/reduce conflict for AND in state 35 resolved as shift
 WARNING: shift/reduce conflict for SI in state 35 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 35 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 35 resolved as shift
-WARNING: shift/reduce conflict for PLUS in state 36 resolved as shift
-WARNING: shift/reduce conflict for MINUS in state 36 resolved as shift
-WARNING: shift/reduce conflict for TIMES in state 36 resolved as shift
-WARNING: shift/reduce conflict for DIVIDE in state 36 resolved as shift
-WARNING: shift/reduce conflict for EQUALS in state 36 resolved as shift
-WARNING: shift/reduce conflict for SUP in state 36 resolved as shift
-WARNING: shift/reduce conflict for INF in state 36 resolved as shift
-WARNING: shift/reduce conflict for SUPEG in state 36 resolved as shift
-WARNING: shift/reduce conflict for INFEG in state 36 resolved as shift
-WARNING: shift/reduce conflict for EG in state 36 resolved as shift
-WARNING: shift/reduce conflict for NEG in state 36 resolved as shift
-WARNING: shift/reduce conflict for SI in state 36 resolved as shift
-WARNING: shift/reduce conflict for ALORS in state 36 resolved as shift
-WARNING: shift/reduce conflict for SINON in state 36 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 37 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 37 resolved as shift
 WARNING: shift/reduce conflict for TIMES in state 37 resolved as shift
@@ -1880,9 +2230,27 @@ WARNING: shift/reduce conflict for SUPEG in state 37 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 37 resolved as shift
 WARNING: shift/reduce conflict for EG in state 37 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 37 resolved as shift
+WARNING: shift/reduce conflict for OR in state 37 resolved as shift
+WARNING: shift/reduce conflict for AND in state 37 resolved as shift
 WARNING: shift/reduce conflict for SI in state 37 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 37 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 37 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 38 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 38 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 38 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 38 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 38 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 38 resolved as shift
+WARNING: shift/reduce conflict for INF in state 38 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 38 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 38 resolved as shift
+WARNING: shift/reduce conflict for EG in state 38 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 38 resolved as shift
+WARNING: shift/reduce conflict for OR in state 38 resolved as shift
+WARNING: shift/reduce conflict for AND in state 38 resolved as shift
+WARNING: shift/reduce conflict for SI in state 38 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 38 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 38 resolved as shift
 WARNING: shift/reduce conflict for PLUS in state 39 resolved as shift
 WARNING: shift/reduce conflict for MINUS in state 39 resolved as shift
 WARNING: shift/reduce conflict for TIMES in state 39 resolved as shift
@@ -1894,6 +2262,72 @@ WARNING: shift/reduce conflict for SUPEG in state 39 resolved as shift
 WARNING: shift/reduce conflict for INFEG in state 39 resolved as shift
 WARNING: shift/reduce conflict for EG in state 39 resolved as shift
 WARNING: shift/reduce conflict for NEG in state 39 resolved as shift
+WARNING: shift/reduce conflict for OR in state 39 resolved as shift
+WARNING: shift/reduce conflict for AND in state 39 resolved as shift
 WARNING: shift/reduce conflict for SI in state 39 resolved as shift
 WARNING: shift/reduce conflict for ALORS in state 39 resolved as shift
 WARNING: shift/reduce conflict for SINON in state 39 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 42 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 42 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 42 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 42 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 42 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 42 resolved as shift
+WARNING: shift/reduce conflict for INF in state 42 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 42 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 42 resolved as shift
+WARNING: shift/reduce conflict for EG in state 42 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 42 resolved as shift
+WARNING: shift/reduce conflict for OR in state 42 resolved as shift
+WARNING: shift/reduce conflict for AND in state 42 resolved as shift
+WARNING: shift/reduce conflict for SI in state 42 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 42 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 42 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 43 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 43 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 43 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 43 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 43 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 43 resolved as shift
+WARNING: shift/reduce conflict for INF in state 43 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 43 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 43 resolved as shift
+WARNING: shift/reduce conflict for EG in state 43 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 43 resolved as shift
+WARNING: shift/reduce conflict for OR in state 43 resolved as shift
+WARNING: shift/reduce conflict for AND in state 43 resolved as shift
+WARNING: shift/reduce conflict for SI in state 43 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 43 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 43 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 45 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 45 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 45 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 45 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 45 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 45 resolved as shift
+WARNING: shift/reduce conflict for INF in state 45 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 45 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 45 resolved as shift
+WARNING: shift/reduce conflict for EG in state 45 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 45 resolved as shift
+WARNING: shift/reduce conflict for OR in state 45 resolved as shift
+WARNING: shift/reduce conflict for AND in state 45 resolved as shift
+WARNING: shift/reduce conflict for SI in state 45 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 45 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 45 resolved as shift
+WARNING: shift/reduce conflict for PLUS in state 46 resolved as shift
+WARNING: shift/reduce conflict for MINUS in state 46 resolved as shift
+WARNING: shift/reduce conflict for TIMES in state 46 resolved as shift
+WARNING: shift/reduce conflict for DIVIDE in state 46 resolved as shift
+WARNING: shift/reduce conflict for EQUALS in state 46 resolved as shift
+WARNING: shift/reduce conflict for SUP in state 46 resolved as shift
+WARNING: shift/reduce conflict for INF in state 46 resolved as shift
+WARNING: shift/reduce conflict for SUPEG in state 46 resolved as shift
+WARNING: shift/reduce conflict for INFEG in state 46 resolved as shift
+WARNING: shift/reduce conflict for EG in state 46 resolved as shift
+WARNING: shift/reduce conflict for NEG in state 46 resolved as shift
+WARNING: shift/reduce conflict for OR in state 46 resolved as shift
+WARNING: shift/reduce conflict for AND in state 46 resolved as shift
+WARNING: shift/reduce conflict for SI in state 46 resolved as shift
+WARNING: shift/reduce conflict for ALORS in state 46 resolved as shift
+WARNING: shift/reduce conflict for SINON in state 46 resolved as shift
