@@ -1,4 +1,4 @@
-from graph import printTreeGraph
+#from graph import printTreeGraph
 
 #Doc lex 4.3 if dans le docx
 
@@ -6,7 +6,7 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG', 'OR', 'AND', 'SEMICOLON', 'SI', 'ALORS', 'SINON'
+    'EG', 'NEG'
     )
 
 # Tokens
@@ -25,14 +25,17 @@ t_SUPEG    = r'>='
 t_INFEG    = r'<='
 t_EG       = r'=='
 t_NEG      = r'!='
-t_OR       = r'OR'
-t_AND      = r'AND'
 t_SEMICOLON= r';'
-t_SI       = r'SI'
-t_ALORS    = r'ALORS'
-t_SINON    = r'SINON'
+
 
 #global res
+
+reserved = {
+   'if' : 'IF',
+   'then' : 'THEN',
+   'else' : 'ELSE',
+   'while' : 'WHILE'
+}
 
 def t_NUMBER(t):
     r'\d+'
@@ -90,8 +93,12 @@ def p_expression_binop(p):
                   | expression TIMES expression
                   | expression DIVIDE expression'''
 
-    printTreeGraph((p[2], p[1], p[3]))
+    print(p[2], p[1], p[3])
 
+
+    
+    print("Résultat '%s'" % eval(p))
+    
     t = []
     t.append(p[2])
     t.append(p[1])
@@ -158,10 +165,6 @@ def p_statement_cond(p):
     '''expression : expression SI expression
                   | expression ALORS expression
                   | expression SINON expression'''
-
-    if[2] == 'SI' : print("SI envoyé")
-    if[1] == 'SI' : print("si en 1")
-    
 
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
