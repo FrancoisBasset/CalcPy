@@ -11,7 +11,7 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG', 'SEMICOLON', 'OR', 'THEN', 'AND', 'IF', 'ELSE'
+    'EG', 'NEG', 'SEMICOLON', 'THEN', 'IF', 'ELSE', 'NOT', 'AND', 'OR'
     )
 
 # Tokens
@@ -30,12 +30,16 @@ t_SUPEG    = r'>='
 t_INFEG    = r'<='
 t_EG       = r'=='
 t_NEG      = r'!='
+t_NOT      = r'!'
+#t_AND      = r'and'
+t_OR       = r'OR'
 t_SEMICOLON= r';'
 
 
 #global res
 
 reserved = {
+   'and': 'AND',
    'if' : 'IF',
    'then' : 'THEN',
    'else' : 'ELSE',
@@ -83,6 +87,9 @@ def p_statement_expr(p):
     '''statement : expression
                  | expression SEMICOLON statement
                  | '''
+
+    #print(eval(p[0]))
+    
     for index in range(len(p)):
         if index != 0 and index == 1:
             #print(p[index])
@@ -122,26 +129,26 @@ def p_expression_bool(p):
                   | expression NEG expression
                   | expression OR expression
                   | expression AND expression'''
-    
-    if p[2] == '==' : p[0] = p[1] == p[3]
-    elif p[2] == '>': p[0] = p[1] > p[3]
-    elif p[2] == '<': p[0] = p[1] < p[3]
-    elif p[2] == '<=': p[0] = p[1] <= p[3]
-    elif p[2] == '>=': p[0] = p[1] >= p[3]
-    elif p[2] == '!=': p[0] = p[1] != p[3]
-    elif p[2] == 'OR' : p[0] = (p[1] == True) or (p[3] == True)
-    elif p[2] == 'AND' : p[0] = (p[1] == True) and (p[3] == True)
-    elif p[1] == '!' : p[0] = p[2] == False
 
-    #print(p[0])
+    t = []
+    t.append(p[2])
+    t.append(p[1])
+    t.append(p[3])
     
-    #t = []
-    #t.append(p[2])
-    #t.append(p[1])
-    #t.append(p[3])
-    #p[0] = tuple(t)
+    p[0] = tuple(t)
 
-    #print(p[0])
+    printTreeGraph(p[0])
+    print(eval(p[0]))
+    
+    #if p[2] == '==' : p[0] = p[1] == p[3]
+    #elif p[2] == '>': p[0] = p[1] > p[3]
+    #elif p[2] == '<': p[0] = p[1] < p[3]
+    #elif p[2] == '<=': p[0] = p[1] <= p[3]
+    #elif p[2] == '>=': p[0] = p[1] >= p[3]
+    #elif p[2] == '!=': p[0] = p[1] != p[3]
+    #elif p[2] == 'OR' : p[0] = (p[1] == True) or (p[3] == True)
+    #elif p[2] == 'AND' : p[0] = (p[1] == True) and (p[3] == True)
+    #elif p[1] == '!' : p[0] = p[2] == False
 
 def eval(t):
     if type(t) is not tuple:
@@ -155,8 +162,24 @@ def eval(t):
         return eval(t[1]) * eval(t[2])
     elif t[0] == '/':
         return eval(t[1]) / eval(t[2])
-    else:
-        return t[0]
+    
+    elif t[0] == '==':
+        return eval(t[1]) == eval(t[2])
+    elif t[0] == '!=':
+        return eval(t[1]) != eval(t[2])
+    elif t[0] == '>':
+        return eval(t[1]) > eval(t[2])
+    elif t[0] == '<':
+        return eval(t[1]) < eval(t[2])
+    elif t[0] == '<=':
+        return eval(t[1]) <= eval(t[2])
+    elif t[0] == 'OR':
+        return eval(t[1]) or eval(t[2])
+    elif t[0] == 'AND':
+        return eval(t[1]) and eval(t[2])
+    elif t[0] == '!':
+        return not eval(t[1])
+    
 
     #print(tulpe[0])
     #print(test)
@@ -191,7 +214,7 @@ def p_expression_name(p):
         p[0] = 0
 
 def p_error(p):
-    print("Erreure de syntaxe à : '%s'" % p.value)
+    print("Erreur de syntaxe à : '%s'" % p.value)
 
 import ply.yacc as yacc
 yacc.yacc()
