@@ -1,11 +1,6 @@
 from graph import printTreeGraph
 
-# -----------------------------------------------------------------------------
-# calc.py
-#
-# A simple calculator with variables.
-# -----------------------------------------------------------------------------
-
+#Doc lex 4.3 if dans le docx
 
 tokens = (
     'NAME','NUMBER',
@@ -15,7 +10,6 @@ tokens = (
     )
 
 # Tokens
-
 
 t_PLUS     = r'\+'
 t_MINUS    = r'-'
@@ -38,7 +32,7 @@ t_SI       = r'SI'
 t_ALORS    = r'ALORS'
 t_SINON    = r'SINON'
 
-global res
+#global res
 
 def t_NUMBER(t):
     r'\d+'
@@ -74,8 +68,6 @@ def p_statement_assign(p):
     'statement : NAME EQUALS expression'
     names[p[1]] = p[3]
 
-    tt = (p[2], p[1], p[3])
-    print(tt)
     printTreeGraph((p[2], p[1], p[3]))
 
 def p_statement_expr(p):
@@ -85,32 +77,29 @@ def p_statement_expr(p):
                  | '''
     for index in range(len(p)):
         if index != 0 and index == 1:
-            print(p[index])
+            #print(p[index])
+            pass
     #eval(p)
 
     #printTreeGraph((p[2], p[1], p[3]))
 
+            
 def p_expression_binop(p):
     '''expression : expression PLUS expression
                   | expression MINUS expression
                   | expression TIMES expression
                   | expression DIVIDE expression'''
-    
-    #if p[2] == '+'  : p[0] = p[1] + p[3]
-    #elif p[2] == '-': p[0] = p[1] - p[3]
-    #elif p[2] == '*': p[0] = p[1] * p[3]
-    #elif p[2] == '/': p[0] = p[1] / p[3]
 
     printTreeGraph((p[2], p[1], p[3]))
 
-    
-    print("Résultat '%s'" % p[0])
     t = []
     t.append(p[2])
     t.append(p[1])
     t.append(p[3])
 
     p[0] = tuple(t)#remontée
+
+    eval(p[0])
     
     #print(p[0])
     
@@ -153,14 +142,17 @@ def p_expression_bool(p):
 def eval(tulpe):
     #test = [tulpe[1][1], tulpe[1][0], tulpe[1][2]]
 
-    if tulpe[1][0] == '+'  : tulpe[0] = tulpe[1][1] + tulpe[1][2]
-    elif tulpe[1][0] == '-'  : tulpe[0] = tulpe[1][1] - tulpe[1][2]
-    elif tulpe[1][0] == '*'  : tulpe[0] = tulpe[1][1] * tulpe[1][2]
-    elif tulpe[1][0] == '/'  : tulpe[0] = tulpe[1][1] / tulpe[1][2]
-    print(tulpe[0])
+    print(tulpe)
+
+    if tulpe[1][0] == '+'  : return eval(tulpe[1][1]) + eval(tulpe[1][2])
+    elif tulpe[1][0] == '-'  : return eval(tulpe[1][1]) - eval(tulpe[1][2])
+    elif tulpe[1][0] == '*'  : return eval(tulpe[1][1]) * eval(tulpe[1][2])
+    elif tulpe[1][0] == '/'  : return eval(tulpe[1][1]) / eval(tulpe[1][2])
+
+    #print(tulpe[0])
     #print(test)
     #p_expression_binop(test)
-   
+    
 
 def p_statement_cond(p):
     '''expression : expression SI expression
@@ -178,10 +170,7 @@ def p_expression_uminus(p):
 def p_expression_group(p):
     '''expression : LPAREN expression RPAREN
                   | expression'''
-    print(p[0])
-    print(p[1])
-    print(p[2])
-    print(p[3])
+    
     p[0] = p[2]
 
 def p_expression_number(p):
