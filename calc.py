@@ -1,4 +1,9 @@
-#from graph import printTreeGraph
+from graph import printTreeGraph
+
+#bloc -> bloc statement | statement
+#start -> bloc
+#p[0] = p[1]
+#eval(p[0])
 
 #Doc lex 4.3 if dans le docx
 
@@ -6,7 +11,7 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG'
+    'EG', 'NEG', 'SEMICOLON', 'OR', 'THEN', 'AND', 'IF', 'ELSE'
     )
 
 # Tokens
@@ -82,7 +87,6 @@ def p_statement_expr(p):
         if index != 0 and index == 1:
             #print(p[index])
             pass
-    #eval(p)
 
     #printTreeGraph((p[2], p[1], p[3]))
 
@@ -91,25 +95,18 @@ def p_expression_binop(p):
     '''expression : expression PLUS expression
                   | expression MINUS expression
                   | expression TIMES expression
-                  | expression DIVIDE expression'''
-
-    print(p[2], p[1], p[3])
-
-
-    
-    print("Résultat '%s'" % eval(p))
+                  | expression DIVIDE expression'''  
     
     t = []
     t.append(p[2])
     t.append(p[1])
     t.append(p[3])
 
-    p[0] = tuple(t)#remontée
+    p[0] = tuple(t)
 
-    eval(p[0])
-    
-    #print(p[0])
-    
+    printTreeGraph(p[0])
+
+    print(eval(p[0]))
 
 def p_expression_aff(p):
     'expression : expression EQUALS expression'
@@ -146,15 +143,20 @@ def p_expression_bool(p):
 
     #print(p[0])
 
-def eval(tulpe):
-    #test = [tulpe[1][1], tulpe[1][0], tulpe[1][2]]
+def eval(t):
+    if type(t) is not tuple:
+        return t
 
-    print(tulpe)
-
-    if tulpe[1][0] == '+'  : return eval(tulpe[1][1]) + eval(tulpe[1][2])
-    elif tulpe[1][0] == '-'  : return eval(tulpe[1][1]) - eval(tulpe[1][2])
-    elif tulpe[1][0] == '*'  : return eval(tulpe[1][1]) * eval(tulpe[1][2])
-    elif tulpe[1][0] == '/'  : return eval(tulpe[1][1]) / eval(tulpe[1][2])
+    if t[0] == '+':
+        return eval(t[1]) + eval(t[2])
+    elif t[0] == '-':
+        return eval(t[1]) - eval(t[2])
+    elif t[0] == '*':
+        return eval(t[1]) * eval(t[2])
+    elif t[0] == '/':
+        return eval(t[1]) / eval(t[2])
+    else:
+        return t[0]
 
     #print(tulpe[0])
     #print(test)
@@ -162,9 +164,9 @@ def eval(tulpe):
     
 
 def p_statement_cond(p):
-    '''expression : expression SI expression
-                  | expression ALORS expression
-                  | expression SINON expression'''
+    '''expression : expression IF expression
+                  | expression THEN expression
+                  | expression ELSE expression'''
 
 def p_expression_uminus(p):
     'expression : MINUS expression %prec UMINUS'
