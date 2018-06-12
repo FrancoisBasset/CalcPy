@@ -11,7 +11,7 @@ tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG', 'SEMICOLON', 'THEN', 'IF', 'ELSE', 'NOT', 'AND', 'OR'
+    'EG', 'NEG', 'SEMICOLON', 'THEN', 'IF', 'ELSE', 'NOT', 'AND', 'OR', 'PRINT'
     )
 
 # Tokens
@@ -31,15 +31,16 @@ t_INFEG    = r'<='
 t_EG       = r'=='
 t_NEG      = r'!='
 t_NOT      = r'!'
-#t_AND      = r'and'
-t_OR       = r'OR'
+t_AND      = r'&&'
+t_OR       = r'\|\|'
 t_SEMICOLON= r';'
 
 
 #global res
 
 reserved = {
-   'and': 'AND',
+   #'and': 'AND',
+   'print': 'PRINT',
    'if' : 'IF',
    'then' : 'THEN',
    'else' : 'ELSE',
@@ -70,7 +71,7 @@ lex.lex()
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','TIMES','DIVIDE'),
-    ('right','UMINUS')
+    ('right','UMINUS')    
     )
 
 # dictionary of names (for storing variables)
@@ -139,16 +140,30 @@ def p_expression_bool(p):
 
     printTreeGraph(p[0])
     print(eval(p[0]))
-    
-    #if p[2] == '==' : p[0] = p[1] == p[3]
-    #elif p[2] == '>': p[0] = p[1] > p[3]
-    #elif p[2] == '<': p[0] = p[1] < p[3]
-    #elif p[2] == '<=': p[0] = p[1] <= p[3]
-    #elif p[2] == '>=': p[0] = p[1] >= p[3]
-    #elif p[2] == '!=': p[0] = p[1] != p[3]
-    #elif p[2] == 'OR' : p[0] = (p[1] == True) or (p[3] == True)
-    #elif p[2] == 'AND' : p[0] = (p[1] == True) and (p[3] == True)
-    #elif p[1] == '!' : p[0] = p[2] == False
+
+def p_statement_print(p):
+    '''statement : PRINT expression'''
+
+    t = []
+    t.append(p[0])
+    t.append(p[1])
+    t.append(None)
+
+    p[0] = tuple(t)
+
+    printTreeGraph(p[0])
+
+def p_statement_cond(p):
+    '''statement : IF expression THEN statement'''
+
+    t = []
+    t.append(p[0])
+    t.append(p[1])
+    t.append(p[3])
+
+    p[0] = tuple(t)
+
+    printTreeGraph(p[0])
 
 def eval(t):
     if type(t) is not tuple:
