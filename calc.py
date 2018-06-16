@@ -7,11 +7,19 @@ from graph import printTreeGraph
 
 #Doc lex 4.3 if dans le docx
 
+reserved = {
+   'show': 'SHOW',
+   'if' : 'IF',
+   'then' : 'THEN',
+   'else' : 'ELSE',
+   'while' : 'WHILE'
+}
+
 tokens = (
     'NAME','NUMBER',
     'PLUS','MINUS','TIMES','DIVIDE','EQUALS',
     'LPAREN','RPAREN', 'SUP', 'INF', 'SUPEG', 'INFEG',
-    'EG', 'NEG', 'SEMICOLON', 'THEN', 'IF', 'ELSE', 'NOT', 'AND', 'OR', 'PRINT'
+    'EG', 'NEG', 'SEMICOLON', 'THEN', 'IF', 'ELSE', 'NOT', 'AND', 'OR', 'SHOW'
     )
 
 # Tokens
@@ -35,17 +43,7 @@ t_AND      = r'&&'
 t_OR       = r'\|\|'
 t_SEMICOLON= r';'
 
-
 #global res
-
-reserved = {
-   #'and': 'AND',
-   'print': 'PRINT',
-   'if' : 'IF',
-   'then' : 'THEN',
-   'else' : 'ELSE',
-   'while' : 'WHILE'
-}
 
 def t_NUMBER(t):
     r'\d+'
@@ -71,7 +69,8 @@ lex.lex()
 precedence = (
     ('left','PLUS','MINUS'),
     ('left','TIMES','DIVIDE'),
-    ('right','UMINUS')    
+    ('right','UMINUS'),
+    ('left', 'SHOW')
     )
 
 # dictionary of names (for storing variables)
@@ -84,17 +83,16 @@ def p_statement_assign(p):
     printTreeGraph((p[2], p[1], p[3]))
 
 def p_statement_expr(p):
-
     '''statement : expression
                  | expression SEMICOLON statement
                  | '''
 
     #print(eval(p[0]))
     
-    for index in range(len(p)):
-        if index != 0 and index == 1:
+    #for index in range(len(p)):
+     #   if index != 0 and index == 1:
             #print(p[index])
-            pass
+      #      pass
 
     #printTreeGraph((p[2], p[1], p[3]))
 
@@ -141,17 +139,20 @@ def p_expression_bool(p):
     printTreeGraph(p[0])
     print(eval(p[0]))
 
-def p_statement_print(p):
-    '''statement : PRINT expression'''
+def p_statement_show(p):
+    '''statement : SHOW'''
+    
+    print("ok")
 
-    t = []
-    t.append(p[0])
-    t.append(p[1])
-    t.append(None)
+   # t = []
+   # t.append(p[0])
+   # t.append(p[1])
+    #t.append(None)
 
-    p[0] = tuple(t)
+    #p[0] = tuple(t)
+    #print(p[0])
 
-    printTreeGraph(p[0])
+    #printTreeGraph(p[0])
 
 def p_statement_cond(p):
     '''statement : IF expression THEN statement'''
@@ -188,17 +189,12 @@ def eval(t):
         return eval(t[1]) < eval(t[2])
     elif t[0] == '<=':
         return eval(t[1]) <= eval(t[2])
-    elif t[0] == 'OR':
+    elif t[0] == '||':
         return eval(t[1]) or eval(t[2])
-    elif t[0] == 'AND':
+    elif t[0] == '&&':
         return eval(t[1]) and eval(t[2])
     elif t[0] == '!':
         return not eval(t[1])
-    
-
-    #print(tulpe[0])
-    #print(test)
-    #p_expression_binop(test)
     
 
 def p_statement_cond(p):
@@ -222,6 +218,10 @@ def p_expression_number(p):
 
 def p_expression_name(p):
     'expression : NAME'
+
+    if p[1] in reserved:
+        return
+    
     try:
         p[0] = names[p[1]]
     except LookupError:
